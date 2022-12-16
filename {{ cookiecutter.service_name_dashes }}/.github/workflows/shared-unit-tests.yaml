@@ -1,0 +1,15 @@
+name: Unit Tests & Code Coverage
+
+on:
+  workflow_call:
+
+jobs:
+  unit-tests:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Unit Tests
+        run: |
+          npm ci
+          npm run coverage

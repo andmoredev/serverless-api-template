@@ -1,0 +1,26 @@
+name: Lint
+
+on:
+  workflow_call:
+
+jobs:
+  spectral:
+    name: Lint OpenAPI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: stoplightio/spectral-action@latest
+        name: Run Spectral Lint
+        with:
+          file_glob: openapi.yaml
+
+  eslint:
+    name: Lint JS
+    runs-on: ubuntu-latest
+    container:
+      image: node:18-alpine
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          npm ci
+          npm run lint

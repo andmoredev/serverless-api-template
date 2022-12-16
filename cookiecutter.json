@@ -1,0 +1,9 @@
+{
+  "service_name": "Task Service",
+  "service_name_dashes": ["{{ cookiecutter.service_name|lower|replace(' ', '-') }}"],
+  "service_description": "Service to manage tasks",
+  "_copy_without_render": [
+    ".github/workflows/*.yaml",
+    "tools/**/*.js"
+  ]
+}

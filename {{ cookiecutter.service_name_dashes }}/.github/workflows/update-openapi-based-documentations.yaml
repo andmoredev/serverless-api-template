@@ -1,0 +1,46 @@
+name: Update OpenAPI Based Documentation
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'openapi.yaml'
+
+jobs:
+  generate-openapi-based-docs:
+    name: Generate OpenAPI Based Docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Configure NPM
+        env:
+          NPM_ARTIFACTORY_AUTH: ${{ secrets.SCRATCH_ARTIFACTORY_TOKEN }}
+        run: |
+          npm config set registry https://tylertech.jfrog.io/tylertech/api/npm/npm
+          npm config set _auth "$NPM_ARTIFACTORY_AUTH"
+          npm config set always-auth true
+      - name: Run Tools
+        run: |
+          npm install -g redoc-cli
+          npm install
+
+          npm run generate-implemented-endpoint-report
+          redoc-cli build ./openapi.yaml
+          mv redoc-static.html docs/index.html
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "GitHub Actions Bot"
+            git config user.email "<>"
+            git add "docs/index.html" -f
+            git add "docs/api-implementation-status.md" -f
+            git commit -m "[skip ci] Update OpenAPI Based Documentation"
+            git push
+          else
+            echo "no changes";
+          fi

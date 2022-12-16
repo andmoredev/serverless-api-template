@@ -1,0 +1,247 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Task Service
+  description: Manage your tasks like a boss.
+  contact:
+    name: Andres Moreno
+    email: andres@andmore.dev
+
+tags:
+  - name: Tasks
+    description: Task to be done
+
+servers:
+  - url: https://6ixg8yd734.execute-api.us-east-1.amazonaws.com/qa
+    description: QA Base URL
+
+security:
+  - jwt: []
+
+x-amazon-apigateway-request-validators:
+  Validate body, query string parameters, and headers:
+    validateRequestParameters: true
+    validateRequestBody: true
+
+x-amazon-apigateway-gateway-responses:
+  BAD_REQUEST_BODY:
+    statusCode: '400'
+    responseTemplates:
+      application/json: '{ "message": "$context.error.validationErrorString" }'
+  UNAUTHORIZED:
+    statusCode: '401'
+    responseTemplates:
+      application/json: '{ "message": "Unauthorized" }'
+  ACCESS_DENIED:
+    statusCode: '401'
+    responseTemplates:
+      application/json: '{ "message": "Unauthorized" }'
+
+paths:
+  /tasks:
+    post:
+      summary: Create Task
+      description: |
+        Create a task to be done. Tasks can have a type to allow for better categorization
+        Optionally a due date can be provided.
+      operationId: createTask
+      tags:
+        - Tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - type
+              properties:
+                name:
+                  type: string
+                type:
+                  type: string
+                  enum:
+                    - Work
+                    - Personal
+                dueDate:
+                  type: string
+                  format: date-time
+      responses:
+        '201':
+          description: 'Task was created'
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: string
+        '400':
+          description: Invalid data provided
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                properties:
+                  message:
+                    type: string
+        '501':
+          $ref: '#/components/responses/notImplementedError'
+      x-amazon-apigateway-request-validator: Validate body, query string parameters, and headers
+      x-amazon-apigateway-integration:
+        responses:
+          '200':
+            statusCode: '501'
+            responseTemplates:
+              application/json: |
+                {
+                  "message": "Method has been mocked and not yet implemented."
+                }
+          default:
+            statusCode: '500'
+            responseTemplates:
+              application/json: |
+                {
+                  "message": "Unhandled Error."
+                }
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode": 200
+            }
+        type: mock
+
+    get:
+      summary: Get Tasks
+      description: |
+        Get paginated list of tasks.
+        Products can be optionally filtered by providing a type and/or a date range for when it's due.
+      operationId: getTasks
+      tags:
+        - Tasks
+      parameters:
+        - in: query
+          name: type
+          description: Type of tasks to be returned
+          schema:
+            type: string
+            enum:
+              - Work
+              - Personal
+        - $ref: '#/components/parameters/queryPageSize'
+        - $ref: '#/components/parameters/queryPageToken'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    maxItems: 30
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                            - Work
+                            - Personal
+                        dueDate:
+                          type: string
+                          format: date-time
+                  pageToken:
+                    type: string
+        '500':
+          $ref: '#/components/responses/unhandledError'
+        '501':
+          $ref: '#/components/responses/notImplementedError'
+      x-amazon-apigateway-request-validator: Validate body, query string parameters, and headers
+      x-amazon-apigateway-integration:
+        responses:
+          '200':
+            statusCode: '501'
+            responseTemplates:
+              application/json: |
+                {
+                  "message": "Method has been mocked and not yet implemented."
+                }
+          default:
+            statusCode: '500'
+            responseTemplates:
+              application/json: |
+                {
+                  "message": "Unhandled Error."
+                }
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode": 200
+            }
+        type: mock
+
+components:
+  parameters:
+    queryPageSize:
+      in: query
+      name: page-size
+      schema:
+        type: integer
+        minimum: 5
+        maximum: 100
+        default: 10
+        multipleOf: 5
+      required: false
+      description: Number of items returned per request.
+    queryPageToken:
+      in: query
+      name: page-token
+      schema:
+        type: string
+      required: false
+      description: Token of the last item evaluated in the previous request. This is empty for the first requested page.
+
+  responses:
+    unhandledError:
+      description: Unhandled error
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - message
+            properties:
+              message:
+                type: string
+                enum:
+                  - Unhandled Error.
+
+    notImplementedError:
+      description: Endpoint is mocked and has not yet been implemented.
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - message
+            properties:
+              message:
+                type: string
+                enum:
+                  - Method has been mocked and not yet implemented.
+
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

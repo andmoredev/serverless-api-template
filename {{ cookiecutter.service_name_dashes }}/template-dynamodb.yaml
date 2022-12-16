@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Task Service - DynamoDB
+Transform:
+- AWS::Serverless-2016-10-31
+
+Parameters:
+  TableName:
+    Type: String
+
+Resources:
+  TaskServiceTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: !Ref TableName
+      BillingMode: PAY_PER_REQUEST
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+
+  # Parameters
+  TaskServiceTableName:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: TaskServiceTableName
+      Type: String
+      Value: !Ref TaskServiceTable
+
+  TaskServiceTableArn:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: TaskServiceTableArn
+      Type: String
+      Value: !GetAtt TaskServiceTable.Arn

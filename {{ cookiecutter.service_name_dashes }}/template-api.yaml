@@ -1,0 +1,63 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: {{ cookiecutter.service_name }}
+Transform:
+- AWS::Serverless-2016-10-31
+
+Parameters:
+  TaskServiceTableName:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: TaskServiceTableName
+  TaskServiceTableArn:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: TaskServiceTableArn
+
+Globals:
+  Function:
+    Tracing: Active
+    Timeout: 10
+    Runtime: nodejs18.x
+    MemorySize: 128
+    Handler: index.handler
+    Architectures:
+      - arm64
+
+Resources:
+  APIGatewayCloudWatchRoleAccount:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn: !GetAtt APIGatewayCloudWatchRole.Arn
+
+  APIGatewayCloudWatchRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service: apigateway.amazonaws.com
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+
+  TaskServiceApi:
+    Type: AWS::Serverless::Api
+    DependsOn: APIGatewayCloudWatchRoleAccount
+    Properties:
+      StageName: api
+      TracingEnabled: true
+      MethodSettings:
+        - HttpMethod: '*'
+          LoggingLevel: ERROR
+          ResourcePath: '/*'
+      DefinitionBody:
+        Fn::Transform:
+          Name: AWS::Include
+          Parameters:
+            Location: ./schemas/openapi.yaml
+
+Outputs:
+  ApiURL:
+    Description: API URL
+    Value: !Sub https://${TaskServiceApi}.execute-api.${AWS::Region}.amazonaws.com/api

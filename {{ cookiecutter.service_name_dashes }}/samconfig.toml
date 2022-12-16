@@ -1,0 +1,20 @@
+version = 0.1
+[api]
+[api.deploy]
+[api.deploy.parameters]
+stack_name = "{{ cookiecutter.service_name_dashes }}-api"
+capabilities = "CAPABILITY_IAM"
+
+[dynamodb]
+[dynamodb.deploy]
+[dynamodb.deploy.parameters]
+stack_name = "{{ cookiecutter.service_name_dashes }}-dynamodb"
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = [
+  "TableName={{ cookiecutter.service_name_dashes }}"
+]
+
+[default.build]
+[default.build.parameters]
+cached="true"
+parallel="true"

@@ -1,0 +1,7 @@
+{
+  "name": "dynamodb-dependencies",
+  "version": "1.0.0",
+  "dependencies": {
+    "ulid": "^2.3.0"
+  }
+}
