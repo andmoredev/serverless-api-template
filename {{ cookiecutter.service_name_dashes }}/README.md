@@ -1,139 +1,26 @@
-# Basic Lambda
+# Github Workflow Setup
+To have the Github Workflows run successfully we have to create the trust relationship between Github and your AWS account so Github can assume the necessary role to run commands against AWS.
 
-```yaml
-BasicLambda:
-  Type: AWS::Serverless::Function
-  Properties:
-    CodeUri: functions/test-function
+## Set trust relationship
+
+You can manually go through the the [Github documentation to set it up](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services) or we can leverage `sam pipeline` to generate all of this for us.
+
+Run `sam pipeline bootstrap`
+
+Fill in all the data that it requests. When asked for the Role ARNs and the artifact Bucket Name please make sure to check if these things already exist for the account you are deploying to. If so provide the data as it already exists so that it doesn't create these resources again.
+
+Once the execution ends you will get the information of the created resources in the `.aws-sam/pipeline/pipelineconfig.toml` file.
+
+The most important things are the roles and the bucket that you will be using in your CI/CD pipeline.
+
+## Setup Github Workflows
+SAM pipelines also provides a way to setup the GitHub workflows and you can use their prebuilt template or use a custom template.
+
+To go through this process you will now need ot run the following command.
+
+```bash
+sam pipeline init
 ```
 
-This produces the *AWSLambdaBasicExecutionRole* that allows a Lambda to CreateLogGroup, CreteLogStream and PutLogEvents to any resource
-
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
-```
-
-# Basic Lambda with Tracing
-* What Basic Lambda has plus below
-
-This creates a AWSWrayWriteOnlyAccess again with Resource set to *
-
-```yaml
-BasicLambdaWithTracing:
-    Type: AWS::Serverless::Function
-    Properties:
-      Tracing: Active
-      CodeUri: functions/test-function
-```
-
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "xray:PutTraceSegments",
-                "xray:PutTelemetryRecords",
-                "xray:GetSamplingRules",
-                "xray:GetSamplingTargets",
-                "xray:GetSamplingStatisticSummaries"
-            ],
-            "Resource": [
-                "*"
-            ]
-        }
-    ]
-}
-```
-
-# Basic Lambda with API Gateway Event
-* What Basic Lambda with Tracing has plus below
-
-This creates a Lambda Resource Permission instead of a role
-
-```yaml
-BasicLambdaWithAPI:
-    Type: AWS::Serverless::Function
-    Properties:
-      Tracing: Active
-      CodeUri: functions/test-function
-      Events:
-        TestEvent:
-          Type: Api
-          Properties:
-            Path: /tests
-            Method: POST
-```
-
-Creates a Resource-based policy statement for API Gateway to be able to invoke that lambda function for this specific
-![APIPermission](is-it-polp-simple-lambda-api-permissions.jpg)
-
-Which I'm assuming looks something like this
-```json
-{
-    "Effect": "Allow",
-    "Principal": {
-      "Service": "apigateway.amazonaws.com",
-    },
-    "Action": [
-        "lambda:InvokeFunction"
-    ],
-    "Condition" : {
-      "ArnLike": {
-        "AWS:SourceArn": "arn:aws:execute-api:us-east-1:354828244626:ar4xtq6zy5/*/POST/tests"
-      }
-    }
-}
-```
-
-# Basic Lambda with SQS Event
-* What Basic Lambda with Tracing has plus below
-
-This creates a AWSLambdaSQSQueueExecutionRole again with Resource set to *
-
-```yaml
-BasicLambdaWithQueueEvent:
-  Type: AWS::Serverless::Function
-  Properties:
-    Tracing: Active
-    CodeUri: functions/test-function
-    Events:
-      TestEvent:
-        Type: SQS
-        Properties:
-          Queue: !GetAtt TestQueue.Arn
-```
-
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "sqs:ReceiveMessage",
-                "sqs:DeleteMessage",
-                "sqs:GetQueueAttributes",
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
-```
+And if you would like to use my custom generated template you will need to set this as the git url when it requests it
+`blah blah blah`

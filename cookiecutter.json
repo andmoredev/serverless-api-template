@@ -1,9 +1,14 @@
 {
+  "outputDir": "aws-sam-pipeline",
   "service_name": "Task Service",
   "service_name_dashes": ["{{ cookiecutter.service_name|lower|replace(' ', '-') }}"],
   "service_description": "Service to manage tasks",
+  "dynamodb_table_name": "",
+  "main_git_branch": "",
+  "qa_pipeline_execution_role": "",
+  "qa_cloudformation_execution_role": "",
+  "qa_artifacts_bucket": "",
   "_copy_without_render": [
-    ".github/workflows/*.yaml",
     "tools/**/*.js"
   ]
 }

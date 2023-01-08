@@ -6,6 +6,7 @@ Transform:
 Parameters:
   TableName:
     Type: String
+    Default: {{ cookiecutter.dynamodb_table_name }}
 
 Resources:
   TaskServiceTable:
