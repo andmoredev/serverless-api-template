@@ -28,18 +28,3 @@ Resources:
           AttributeType: S
         - AttributeName: sk
           AttributeType: S
-
-  # Parameters
-  TaskServiceTableName:
-    Type: AWS::SSM::Parameter
-    Properties:
-      Name: TaskServiceTableName
-      Type: String
-      Value: !Ref TaskServiceTable
-
-  TaskServiceTableArn:
-    Type: AWS::SSM::Parameter
-    Properties:
-      Name: TaskServiceTableArn
-      Type: String
-      Value: !GetAtt TaskServiceTable.Arn

@@ -3,14 +3,6 @@ Description: {{ cookiecutter.service_name }}
 Transform:
 - AWS::Serverless-2016-10-31
 
-Parameters:
-  TaskServiceTableName:
-    Type: AWS::SSM::Parameter::Value<String>
-    Default: TaskServiceTableName
-  TaskServiceTableArn:
-    Type: AWS::SSM::Parameter::Value<String>
-    Default: TaskServiceTableArn
-
 Globals:
   Function:
     Tracing: Active
