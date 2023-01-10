@@ -95,11 +95,11 @@ paths:
       x-amazon-apigateway-integration:
         responses:
           '200':
-            statusCode: '501'
+            statusCode: '201'
             responseTemplates:
               application/json: |
                 {
-                  "message": "Method has been mocked and not yet implemented."
+                  "id": "Method has been mocked and not yet implemented."
                 }
           default:
             statusCode: '500'
