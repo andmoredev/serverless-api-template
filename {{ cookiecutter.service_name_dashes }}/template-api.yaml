@@ -47,7 +47,7 @@ Resources:
         Fn::Transform:
           Name: AWS::Include
           Parameters:
-            Location: ./schemas/openapi.yaml
+            Location: ./openapi.yaml
 
 Outputs:
   ApiURL:

@@ -1,10 +1,9 @@
 {
-  "local": "./schemas/openapi.yaml",
+  "local": "./openapi.yaml",
   "output": "collection.postman.json",
   "envFile": "portman/.env-portman",
   "portmanConfigFile": "./portman/portman-config.json",
   "includeTests": true,
   "syncPostman": false,
-  "runNewman": true,
-  "baseUrl": "https://6ixg8yd734.execute-api.us-east-1.amazonaws.com/qa"
+  "runNewman": true
 }

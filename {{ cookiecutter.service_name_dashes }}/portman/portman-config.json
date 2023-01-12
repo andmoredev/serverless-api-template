@@ -101,15 +101,6 @@
   "assignVariables": [
   ],
   "overwrites": [
-    {
-      "openApiOperation": "GET::/*",
-      "overwriteRequestQueryParams": [
-        {
-          "key": "page-token",
-          "disable": true
-        }
-      ]
-    }
   ],
   "globals": {
     "collectionPreRequestScripts": [],

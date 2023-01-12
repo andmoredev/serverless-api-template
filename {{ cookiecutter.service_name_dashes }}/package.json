@@ -1,15 +1,11 @@
 {
-  "name": "{{ cookiecutter.service_name_dashes }}",
-  "description": "{{ cookiecutter.service_description }}",
+  "name": "REST Serverless API",
   "version": "0.0.1",
   "dependencies": {
     "@aws-lambda-powertools/logger": "^1.2.1",
     "@aws-lambda-powertools/metrics": "^1.2.1",
     "@aws-lambda-powertools/tracer": "^1.2.1",
-    "@aws-sdk/client-dynamodb": "^3.142.0",
-    "@aws-sdk/util-dynamodb": "^3.142.0",
-    "@middy/core": "^3.5.0",
-    "ulid": "^2.3.0"
+    "@middy/core": "^3.5.0"
   },
   "devDependencies": {
     "@apideck/portman": "^1.18.0",
@@ -19,12 +15,10 @@
     "aws-sdk-client-mock": "^1.0.0",
     "c8": "^7.12.0",
     "chai": "^4.3.6",
-    "fs-extra": "^10.1.0",
     "js-yaml": "^4.1.0",
     "jsonpath-plus": "^7.0.0",
     "mocha": "^10.0.0",
     "mustache": "^4.2.0",
-    "qs": "^6.11.0",
     "sinon": "^14.0.0"
   },
   "scripts": {
@@ -33,11 +27,8 @@
     "lint": "eslint {**,.}/*.js --no-error-on-unmatched-pattern",
     "deploy": "sam build & sam deploy",
     "portman": "portman --cliOptionsFile portman/portman-cli.json",
-    "set-portman-config": "node ./portman/set-portman-config/index.js",
     "generate-implemented-endpoint-report": "node tools/generate-implemented-endpoints-report/index.js",
     "deploy-dynamodb": "sam deploy --template template-dynamodb.yaml --config-env dynamodb --resolve-s3 --no-fail-on-empty-changeset",
-    "deploy-api": "sam build --cached --parallel --template template-api.yaml && sam deploy --template template-api.yaml --config-env api --resolve-s3 --no-fail-on-empty-changeset",
-    "deploy-sqs": "sam deploy --template template-sqs.yaml --resolve-s3 --no-fail-on-empty-changeset"
-
+    "deploy-api": "sam build --cached --parallel --template template-api.yaml && sam deploy --template template-api.yaml --config-env api --resolve-s3 --no-fail-on-empty-changeset"
   }
 }
