@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Task Service - DynamoDB
+Description: {{ cookiecutter.service_name }} - DynamoDB
 Transform:
 - AWS::Serverless-2016-10-31
 
@@ -9,7 +9,7 @@ Parameters:
     Default: {{ cookiecutter.dynamodb_table_name }}
 
 Resources:
-  TaskServiceTable:
+  DynamoDBTable:
     Type: AWS::DynamoDB::Table
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain

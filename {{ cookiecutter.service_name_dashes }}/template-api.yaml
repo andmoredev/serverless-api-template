@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: {{ cookiecutter.service_name }}
+Description: {{ cookiecutter.service_name }} - API
 Transform:
 - AWS::Serverless-2016-10-31
 
@@ -33,7 +33,7 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
 
-  TaskServiceApi:
+  Api:
     Type: AWS::Serverless::Api
     DependsOn: APIGatewayCloudWatchRoleAccount
     Properties:
@@ -52,4 +52,4 @@ Resources:
 Outputs:
   ApiURL:
     Description: API URL
-    Value: !Sub https://${TaskServiceApi}.execute-api.${AWS::Region}.amazonaws.com/api
+    Value: !Sub https://${Api}.execute-api.${AWS::Region}.amazonaws.com/api
