@@ -1,5 +1,6 @@
 {
   "outputDir": "",
+  "service_name": "",
   "dynamodb_table_name": "",
   "_copy_without_render": [
     "tools/**/*.js"
