@@ -89,17 +89,21 @@ paths:
                 properties:
                   message:
                     type: string
-        '501':
-          $ref: '#/components/responses/notImplementedError'
       x-amazon-apigateway-request-validator: Validate body, query string parameters, and headers
       x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode": 200
+            }
         responses:
           '200':
             statusCode: '201'
             responseTemplates:
               application/json: |
                 {
-                  "id": "Method has been mocked and not yet implemented."
+                  "id": "mockId"
                 }
           default:
             statusCode: '500'
@@ -108,29 +112,8 @@ paths:
                 {
                   "message": "Unhandled Error."
                 }
-        requestTemplates:
-          application/json: |
-            {
-              "statusCode": 200
-            }
-        type: mock
 
 components:
-  responses:
-    notImplementedError:
-      description: Endpoint is mocked and has not yet been implemented.
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-              - message
-            properties:
-              message:
-                type: string
-                enum:
-                  - Method has been mocked and not yet implemented.
-
   securitySchemes:
     jwt:
       type: http

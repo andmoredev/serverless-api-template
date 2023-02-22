@@ -25,10 +25,8 @@
     "test": "mocha functions/*/tests/*.js",
     "coverage": "c8 npm test",
     "lint": "eslint {**,.}/*.js --no-error-on-unmatched-pattern",
-    "deploy": "sam build & sam deploy",
     "portman": "portman --cliOptionsFile portman/portman-cli.json",
     "generate-implemented-endpoint-report": "node tools/generate-implemented-endpoints-report/index.js",
-    "deploy-dynamodb": "sam deploy --template template-dynamodb.yaml --config-env dynamodb --resolve-s3 --no-fail-on-empty-changeset",
-    "deploy-api": "sam build --cached --parallel --template template-api.yaml && sam deploy --template template-api.yaml --config-env api --resolve-s3 --no-fail-on-empty-changeset"
+    "deploy": "sam build --cached --parallel && sam deploy --no-fail-on-empty-changeset"
   }
 }
