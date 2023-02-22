@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "/opt/nodejs/lambda-power-tools-utils": ["./layers/lambda-power-tools-utils/lambda-power-tools-utils"]
+      "/opt/nodejs/lambda-power-tools-utils": ["layers/lambda-powertools-utils/lambda-powertools-utils"]
     }
   },
   "include": [

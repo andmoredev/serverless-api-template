@@ -28,7 +28,7 @@ const metricsOptions = {
   captureColdStartMetric: true
 };
 
-exports.initializePowerTools = (handler) => {
+exports.initializePowertools = (handler) => {
   return middy(handler)
       .use(captureLambdaHandler(exports.tracer))
       .use(logMetrics(exports.metrics, metricsOptions))

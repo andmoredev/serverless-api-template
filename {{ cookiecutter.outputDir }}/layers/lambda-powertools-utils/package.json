@@ -1,5 +1,5 @@
 {
-  "name": "lambda-power-tools-utils",
+  "name": "lambda-powertools-utils",
   "description": "Utility functions to help and standarize lambda powertools usage",
   "version": "1.0.0",
   "license": "UNLICENSED",
