@@ -1,8 +1,6 @@
 {
   "outputDir": "",
   "service_name": "",
-  "dynamodb_table_name": "",
-  "dev_artifact_bucket_name": "",
   "main_git_branch": "",
   "stack_name": "",
   "sandbox_stage_name": "",

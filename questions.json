@@ -6,6 +6,19 @@
       "kind": "info"
     },
     {
+      "key": "service_name",
+      "question": "Service Name?"
+    },
+    {
+      "key": "outputDir",
+      "question": "Folder Location?",
+      "default": {
+        "keyPath": [
+          "service_name"
+        ]
+      }
+    },
+    {
       "key": "main_git_branch",
       "question": "What is the git branch used for deployments?",
       "default": "main"
@@ -21,7 +34,7 @@
       "kind": "info"
     },
     {
-      "key": "message_list_stage_names_qa",
+      "key": "message_list_stage_names_sandbox",
       "question": {
         "keyPath": [
           "stage_names_message"
