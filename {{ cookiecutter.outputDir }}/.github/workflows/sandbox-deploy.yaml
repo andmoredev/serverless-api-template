@@ -37,7 +37,7 @@ jobs:
     needs: [deploy-resources]
     uses: ./.github/workflows/shared-test-api.yaml
     with:
-      ENVIRONMENT : sandbox
+      ENVIRONMENT: sandbox
       AWS_REGION: us-east-1
       PIPELINE_EXECUTION_ROLE: {{ cookiecutter.sandbox_pipeline_execution_role }}
       STACK_NAME: {{ cookiecutter.stack_name }}-{{ '${{ github.ref_name }}' }}
