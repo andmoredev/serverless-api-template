@@ -3,10 +3,10 @@ name: Sandbox Cleanup
 on:
   delete:
     branches-ignore:
-      - main
+      - {{ cookiecutter.main_git_branch }}
 
 concurrency:
-  group: ${{ github.workflow }}
+  group: {{ '${{ github.workflow }}' }}
 
 permissions:
   id-token: write
@@ -21,13 +21,13 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::965116670064:role/aws-sam-cli-managed-sandbox-PipelineExecutionRole-M5L6BSZIWF9K
+          role-to-assume: {{ cookiecutter.sandbox_pipeline_execution_role }}
           role-session-name: packaging
           role-duration-seconds: 3600
           role-skip-session-tagging: true
       - name: Delete Stack
         run: |
           sam delete \
-          --stack-name task-service-${{ github.event.ref }} \
+          --stack-name {{ cookiecutter.stack_name }}-{{ '${{ github.ref_name }}' }}
           --region us-east-1 \
           --no-prompts
