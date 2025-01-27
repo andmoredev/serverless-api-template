@@ -36,8 +36,8 @@ jobs:
       - name: Replace Variables in samconfig
         run: |
           npm i -g replace-in-files-cli
-          replace-in-files --string='{{Environment}}' --replacement='${{ inputs.ENVIRONMENT }}' ./samconfig.toml
-          replace-in-files --string='{{StackName}}' --replacement='${{ inputs.STACK_NAME }}' ./samconfig.toml
+          replace-in-files --string={{ '{{Environment}}' }} --replacement={{ '${{ inputs.ENVIRONMENT }}' }} ./samconfig.toml
+          replace-in-files --string={{ '{{StackName}}' }} --replacement= {{ '${{ inputs.STACK_NAME }}' }} ./samconfig.toml
       - run: sam build
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1-node16
