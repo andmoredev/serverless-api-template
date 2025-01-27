@@ -2,7 +2,7 @@
   "questions": [
     {
       "key": "intro",
-      "question": "\nThis template configures a pipeline that deploys a serverless application to two stages.\n",
+      "question": "\nThis template configures a pipeline that deploys a serverless application to three stages.\n",
       "kind": "info"
     },
     {
@@ -18,6 +18,79 @@
     {
       "key": "message_stage_name",
       "question": "We use the stage configuration name to automatically retrieve the bootstrapped resources created when you ran `sam pipeline bootstrap`.\n",
+      "kind": "info"
+    },
+    {
+      "key": "message_list_stage_names_qa",
+      "question": {
+        "keyPath": [
+          "stage_names_message"
+        ]
+      },
+      "kind": "info"
+    },
+    {
+      "key": "sandbox_stage_name",
+      "question": "Enter the stages configuration name (as provided during the bootstrapping)",
+      "isRequired": true
+    },
+    {
+      "key": "sandbox_region",
+      "question": "What is the AWS region?",
+      "isRequired": true,
+      "allowAutofill": true,
+      "default": {
+        "keyPath": [
+            { "valueOf": "sandbox_stage_name"},
+            "region"
+        ]
+      }
+    },
+    {
+      "key": "sandbox_pipeline_execution_role",
+      "question": "What is the pipeline execution role ARN?",
+      "isRequired": true,
+      "allowAutofill": true,
+      "default": {
+        "keyPath": [
+          {
+            "valueOf": "sandbox_stage_name"
+          },
+          "pipeline_execution_role"
+        ]
+      }
+    },
+    {
+      "key": "sandbox_cloudformation_execution_role",
+      "question": "What is the CloudFormation execution role ARN?",
+      "isRequired": true,
+      "allowAutofill": true,
+      "default": {
+        "keyPath": [
+          {
+            "valueOf": "sandbox_stage_name"
+          },
+          "cloudformation_execution_role"
+        ]
+      }
+    },
+    {
+      "key": "sandbox_artifacts_bucket",
+      "question": "What is the S3 bucket name for artifacts?",
+      "isRequired": true,
+      "allowAutofill": true,
+      "default": {
+        "keyPath": [
+          {
+            "valueOf": "sandbox_stage_name"
+          },
+          "artifacts_bucket"
+        ]
+      }
+    },
+    {
+      "key": "message_sandbox_stage_configured",
+      "question": "Sandbox configured successfully.\n",
       "kind": "info"
     },
     {
@@ -90,7 +163,7 @@
     },
     {
       "key": "message_qa_stage_configured",
-      "question": "QA configured uccessfully.\n",
+      "question": "QA configured successfully.\n",
       "kind": "info"
     },
     {
@@ -163,7 +236,7 @@
     },
     {
       "key": "message_prod_stage_configured",
-      "question": "Prod configured uccessfully.\n",
+      "question": "Prod configured successfully.\n",
       "kind": "info"
     }
   ]
