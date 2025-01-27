@@ -7,6 +7,6 @@ default:
   deploy:
     parameters:
       stack_name: {{ cookiecutter.service_name }}
-      s3_bucket: {{ cookiecutter.dev_artifact_bucket_name }}
+      s3_bucket: {{ cookiecutter.sandbox_artifacts_bucket }}
       capabilities: CAPABILITY_IAM
       image_repositories: []
