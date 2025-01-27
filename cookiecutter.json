@@ -2,7 +2,9 @@
   "outputDir": "",
   "service_name": "",
   "dynamodb_table_name": "",
+  "artifact_bucket_name": "",
   "_copy_without_render": [
-    "tools/**/*.js"
+    "tools/**/*.js",
+    "portman/portman-config.json"
   ]
 }
