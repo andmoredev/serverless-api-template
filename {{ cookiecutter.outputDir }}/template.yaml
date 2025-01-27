@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: {{ cookiecutter.service_name }}
+Description: {{ cookiecutter.stack_name }}
 Transform:
   - AWS::Serverless-2016-10-31
 
@@ -13,8 +13,8 @@ Globals:
       Variables:
         AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
         AWS_ACCOUNT_ID: !Sub ${AWS::AccountId}
-        POWERTOOLS_SERVICE_NAME: {{ cookiecutter.service_name }}-api
-        POWERTOOLS_METRICS_NAMESPACE: {{ cookiecutter.service_name }}
+        POWERTOOLS_SERVICE_NAME: {{ cookiecutter.stack_name }}-api
+        POWERTOOLS_METRICS_NAMESPACE: {{ cookiecutter.stack_name }}
 
 Parameters:
   CognitoUserPoolId:

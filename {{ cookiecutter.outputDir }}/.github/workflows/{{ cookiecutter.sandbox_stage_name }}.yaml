@@ -1,9 +1,10 @@
-name: Sandbox Deploy
+name: {{ cookiecutter.sandbox_stage_name }}
 
 on:
-  push:
-    branches-ignore:
+  pull_request:
+    branches:
       - {{ cookiecutter.main_git_branch }}
+  workflow_dispatch:
 
 concurrency:
   group: {{ '${{ github.workflow }}' }}
@@ -25,11 +26,11 @@ jobs:
     uses: ./.github/workflows/shared-deploy.yaml
     with:
       ENVIRONMENT: sandbox
-      AWS_REGION: us-east-1
+      AWS_REGION: {{ cookiecutter.sandbox_region }}
       PIPELINE_EXECUTION_ROLE: {{ cookiecutter.sandbox_pipeline_execution_role }}
       CLOUDFORMATION_EXECUTION_ROLE: {{ cookiecutter.sandbox_cloudformation_execution_role }}
       ARTIFACTS_BUCKET_NAME: {{ cookiecutter.sandbox_artifacts_bucket }}
-      STACK_NAME: {{ cookiecutter.stack_name }}-{{ '${{ github.ref_name }}' }}
+      STACK_NAME: {{ cookiecutter.stack_name }}
     secrets: inherit
 
   test-api:
@@ -37,8 +38,8 @@ jobs:
     needs: [deploy-resources]
     uses: ./.github/workflows/shared-test-api.yaml
     with:
-      ENVIRONMENT: sandbox
-      AWS_REGION: us-east-1
+      ENVIRONMENT : sandbox
+      AWS_REGION: {{ cookiecutter.sandbox_region }}
       PIPELINE_EXECUTION_ROLE: {{ cookiecutter.sandbox_pipeline_execution_role }}
-      STACK_NAME: {{ cookiecutter.stack_name }}-{{ '${{ github.ref_name }}' }}
+      STACK_NAME: {{ cookiecutter.stack_name }}
     secrets: inherit

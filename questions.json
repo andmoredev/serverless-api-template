@@ -6,15 +6,16 @@
       "kind": "info"
     },
     {
-      "key": "service_name",
-      "question": "Service Name?"
+      "key": "stack_name",
+      "question": "What is the sam application stack name?",
+      "isRequired": true
     },
     {
       "key": "outputDir",
       "question": "Folder Location?",
       "default": {
         "keyPath": [
-          "service_name"
+          "stack_name"
         ]
       }
     },
@@ -22,11 +23,6 @@
       "key": "main_git_branch",
       "question": "What is the git branch used for deployments?",
       "default": "main"
-    },
-    {
-      "key": "stack_name",
-      "question": "What is the sam application stack name?",
-      "isRequired": true
     },
     {
       "key": "message_stage_name",

@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
   version: 1.0.0
-  title: {{ cookiecutter.service_name }}
-  description: {{ cookiecutter.service_name }}
+  title: {{ cookiecutter.stack_name }}
+  description: {{ cookiecutter.stack_name }}
   contact:
     name: Andres Moreno
 
