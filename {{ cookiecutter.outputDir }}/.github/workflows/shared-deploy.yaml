@@ -18,6 +18,9 @@ on:
       ARTIFACTS_BUCKET_NAME:
         required: true
         type: string
+      STACK_NAME:
+        required: true
+        type: string
 
 permissions:
   id-token: write
@@ -26,22 +29,22 @@ permissions:
 jobs:
   build-and-deploy:
     name: Build and Deploy SAM Application
-    needs: [deploy-dynamodb]
     runs-on: ubuntu-latest
     environment: {{ '${{ inputs.ENVIRONMENT }}' }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.8"
-      - uses: aws-actions/setup-sam@v2
+      - name: Replace Variables in samconfig
+        run: |
+          npm i -g replace-in-files-cli
+          replace-in-files --string='{{Environment}}' --replacement='${{ inputs.ENVIRONMENT }}' ./samconfig.toml
+          replace-in-files --string='{{StackName}}' --replacement='${{ inputs.STACK_NAME }}' ./samconfig.toml
       - run: sam build
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
           aws-region: {{ '${{ inputs.AWS_REGION }}' }}
           role-to-assume: {{ '${{ inputs.PIPELINE_EXECUTION_ROLE }}' }}
-          role-session-name: testing-packaging
+          role-session-name: packaging
           role-duration-seconds: 3600
           role-skip-session-tagging: true
       - name: Deploy

@@ -1,7 +1,7 @@
-name: QA
+name: {{ cookiecutter.qa_stage_name }}
 
 on:
-  push:
+  pull_request:
     branches:
       - {{ cookiecutter.main_git_branch }}
   workflow_dispatch:
@@ -25,11 +25,12 @@ jobs:
     needs: [lint, unit-tests]
     uses: ./.github/workflows/shared-deploy.yaml
     with:
-      ENVIRONMENT: prod
-      AWS_REGION: {{ cookiecutter.region }}
-      PIPELINE_EXECUTION_ROLE: {{ cookiecutter.pipeline_execution_role }}
-      CLOUDFORMATION_EXECUTION_ROLE: {{ cookiecutter.cloudformation_execution_role }}
-      ARTIFACTS_BUCKET_NAME: {{ cookiecutter.artifacts_bucket }}
+      ENVIRONMENT: qa
+      AWS_REGION: {{ cookiecutter.qa_region }}
+      PIPELINE_EXECUTION_ROLE: {{ cookiecutter.qa_pipeline_execution_role }}
+      CLOUDFORMATION_EXECUTION_ROLE: {{ cookiecutter.qa_cloudformation_execution_role }}
+      ARTIFACTS_BUCKET_NAME: {{ cookiecutter.qa_artifacts_bucket }}
+      STACK_NAME: {{ cookiecutter.stack_name }}
     secrets: inherit
 
   test-api:
@@ -37,7 +38,8 @@ jobs:
     needs: [deploy-resources]
     uses: ./.github/workflows/shared-test-api.yaml
     with:
-      ENVIRONMENT : prod
-      AWS_REGION: {{ cookiecutter.region }}
-      PIPELINE_EXECUTION_ROLE: {{ cookiecutter.pipeline_execution_role }}
+      ENVIRONMENT : qa
+      AWS_REGION: {{ cookiecutter.qa_region }}
+      PIPELINE_EXECUTION_ROLE: {{ cookiecutter.qa_pipeline_execution_role }}
+      STACK_NAME: {{ cookiecutter.stack_name }}
     secrets: inherit

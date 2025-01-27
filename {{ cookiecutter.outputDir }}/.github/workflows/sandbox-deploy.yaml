@@ -1,0 +1,44 @@
+name: Sandbox Deploy
+
+on:
+  push:
+    branches-ignore:
+      - {{ cookiecutter.main_git_branch }}
+
+concurrency:
+  group: {{ '${{ github.workflow }}' }}
+
+jobs:
+  lint:
+    name: Lint
+    uses: ./.github/workflows/shared-lint.yaml
+    secrets: inherit
+
+  unit-tests:
+    name: Unit Tests
+    uses: ./.github/workflows/shared-unit-tests.yaml
+    secrets: inherit
+
+  deploy-resources:
+    name: Deploy SAM Resources
+    needs: [lint, unit-tests]
+    uses: ./.github/workflows/shared-deploy.yaml
+    with:
+      ENVIRONMENT: sandbox
+      AWS_REGION: us-east-1
+      PIPELINE_EXECUTION_ROLE: {{ cookiecutter.sandbox_pipeline_execution_role }}
+      CLOUDFORMATION_EXECUTION_ROLE: {{ cookiecutter.sandbox_cloudformation_execution_role }}
+      ARTIFACTS_BUCKET_NAME: {{ cookiecutter.sandbox_artifacts_bucket }}
+      STACK_NAME: {{ cookiecutter.stack_name }}-{{ '${{ github.ref_name }}' }}
+    secrets: inherit
+
+  test-api:
+    name: Test API
+    needs: [deploy-resources]
+    uses: ./.github/workflows/shared-test-api.yaml
+    with:
+      ENVIRONMENT : sandbox
+      AWS_REGION: us-east-1
+      PIPELINE_EXECUTION_ROLE: {{ cookiecutter.sandbox_pipeline_execution_role }}
+      STACK_NAME: {{ cookiecutter.stack_name }}-{{ '${{ github.ref_name }}' }}
+    secrets: inherit

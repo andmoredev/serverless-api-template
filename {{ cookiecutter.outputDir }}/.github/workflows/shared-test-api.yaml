@@ -12,6 +12,9 @@ on:
       PIPELINE_EXECUTION_ROLE:
         required: true
         type: string
+      STACK_NAME:
+        required: true
+        type: string
 
 permissions:
   id-token: write
@@ -24,7 +27,6 @@ jobs:
     environment: {{ '${{ inputs.ENVIRONMENT }}' }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
@@ -35,5 +37,5 @@ jobs:
           role-skip-session-tagging: true
       - name: Test API
         run: |
-          url=$(aws cloudformation describe-stacks --stack-name {{ cookiecutter.stack_name }} --query "Stacks[0].Outputs[?OutputKey=='ApiURL'].OutputValue" --output text)
+          url=$(aws cloudformation describe-stacks --stack-name {{ '${{ inputs.STACK_NAME }}' }} --query "Stacks[0].Outputs[?OutputKey=='ApiURL'].OutputValue" --output text)
           npx @apideck/portman --baseUrl $url --cliOptionsFile portman/portman-cli.json

@@ -1,0 +1,33 @@
+name: Sandbox Cleanup
+
+on:
+  delete:
+    branches-ignore:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  cleanup-resources:
+    name: Delete SAM Application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::965116670064:role/aws-sam-cli-managed-sandbox-PipelineExecutionRole-M5L6BSZIWF9K
+          role-session-name: packaging
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+      - name: Delete Stack
+        run: |
+          sam delete \
+          --stack-name task-service-${{ github.event.ref }} \
+          --region us-east-1 \
+          --no-prompts
