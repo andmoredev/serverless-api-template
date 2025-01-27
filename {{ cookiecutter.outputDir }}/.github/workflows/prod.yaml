@@ -1,0 +1,43 @@
+name: QA
+
+on:
+  push:
+    branches:
+      - {{ cookiecutter.main_git_branch }}
+  workflow_dispatch:
+
+concurrency:
+  group: {{ '${{ github.workflow }}' }}
+
+jobs:
+  lint:
+    name: Lint
+    uses: ./.github/workflows/shared-lint.yaml
+    secrets: inherit
+
+  unit-tests:
+    name: Unit Tests
+    uses: ./.github/workflows/shared-unit-tests.yaml
+    secrets: inherit
+
+  deploy-resources:
+    name: Deploy SAM Resources
+    needs: [lint, unit-tests]
+    uses: ./.github/workflows/shared-deploy.yaml
+    with:
+      ENVIRONMENT: prod
+      AWS_REGION: {{ cookiecutter.region }}
+      PIPELINE_EXECUTION_ROLE: {{ cookiecutter.pipeline_execution_role }}
+      CLOUDFORMATION_EXECUTION_ROLE: {{ cookiecutter.cloudformation_execution_role }}
+      ARTIFACTS_BUCKET_NAME: {{ cookiecutter.artifacts_bucket }}
+    secrets: inherit
+
+  test-api:
+    name: Test API
+    needs: [deploy-resources]
+    uses: ./.github/workflows/shared-test-api.yaml
+    with:
+      ENVIRONMENT : prod
+      AWS_REGION: {{ cookiecutter.region }}
+      PIPELINE_EXECUTION_ROLE: {{ cookiecutter.pipeline_execution_role }}
+    secrets: inherit
