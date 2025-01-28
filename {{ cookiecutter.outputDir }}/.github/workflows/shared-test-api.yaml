@@ -30,8 +30,8 @@ jobs:
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
-          aws-region: {{ '${{ inputs.AWS_REGION }}' }}
-          role-to-assume: {{ '${{ inputs.PIPELINE_EXECUTION_ROLE }}' }}
+          aws-region: {{ '${{ vars.AWS_REGION }}' }}
+          role-to-assume: {{ '${{ secrets.PIPELINE_EXECUTION_ROLE }}' }}
           role-session-name: testing-packaging
           role-duration-seconds: 3600
           role-skip-session-tagging: true
