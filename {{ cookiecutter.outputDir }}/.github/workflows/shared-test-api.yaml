@@ -6,12 +6,6 @@ on:
       ENVIRONMENT:
         required: true
         type: string
-      AWS_REGION:
-        required: true
-        type: string
-      PIPELINE_EXECUTION_ROLE:
-        required: true
-        type: string
       STACK_NAME:
         required: true
         type: string
