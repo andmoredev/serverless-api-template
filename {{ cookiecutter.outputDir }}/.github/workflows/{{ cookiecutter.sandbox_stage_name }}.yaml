@@ -9,6 +9,10 @@ on:
 concurrency:
   group: {{ '${{ github.workflow }}' }}
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   lint:
     name: Lint
@@ -26,10 +30,6 @@ jobs:
     uses: ./.github/workflows/shared-deploy.yaml
     with:
       ENVIRONMENT: {{ cookiecutter.sandbox_stage_name }}
-      AWS_REGION: {{ cookiecutter.sandbox_region }}
-      PIPELINE_EXECUTION_ROLE: {{ cookiecutter.sandbox_pipeline_execution_role }}
-      CLOUDFORMATION_EXECUTION_ROLE: {{ cookiecutter.sandbox_cloudformation_execution_role }}
-      ARTIFACTS_BUCKET_NAME: {{ cookiecutter.sandbox_artifacts_bucket }}
       STACK_NAME: {{ cookiecutter.stack_name }}
     secrets: inherit
 
@@ -39,7 +39,5 @@ jobs:
     uses: ./.github/workflows/shared-test-api.yaml
     with:
       ENVIRONMENT: {{ cookiecutter.sandbox_stage_name }}
-      AWS_REGION: {{ cookiecutter.sandbox_region }}
-      PIPELINE_EXECUTION_ROLE: {{ cookiecutter.sandbox_pipeline_execution_role }}
       STACK_NAME: {{ cookiecutter.stack_name }}
     secrets: inherit

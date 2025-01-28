@@ -2,8 +2,6 @@ name: Sandbox Cleanup
 
 on:
   delete:
-    branches-ignore:
-      - {{ cookiecutter.main_git_branch }}
 
 concurrency:
   group: {{ '${{ github.workflow }}' }}
