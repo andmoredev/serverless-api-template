@@ -11,7 +11,7 @@ tags:
     description: Tool endpoints
 
 servers:
-  - url: https://example.com/api
+  - url: https://andmore.dev/api
     description: Example URL
 
 x-amazon-apigateway-request-validators:
