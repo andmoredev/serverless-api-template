@@ -14,12 +14,13 @@ jobs:
   cleanup-resources:
     name: Delete SAM Application
     runs-on: ubuntu-latest
+    environment: {{ cookiecutter.sandbox_stage_name }}
     steps:
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
           aws-region: us-east-1
-          role-to-assume: {{ cookiecutter.sandbox_pipeline_execution_role }}
+          role-to-assume: {{ '${{ secrets.PIPELINE_EXECUTION_ROLE }}' }}
           role-session-name: packaging
           role-duration-seconds: 3600
           role-skip-session-tagging: true

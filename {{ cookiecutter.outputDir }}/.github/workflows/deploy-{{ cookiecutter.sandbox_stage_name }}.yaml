@@ -30,7 +30,7 @@ jobs:
     uses: ./.github/workflows/shared-deploy.yaml
     with:
       ENVIRONMENT: {{ cookiecutter.sandbox_stage_name }}
-      STACK_NAME: {{ cookiecutter.stack_name }}
+      STACK_NAME: {{ cookiecutter.stack_name }}-{{ '${{ github.ref_name }}' }}
     secrets: inherit
 
   test-api:
@@ -39,5 +39,5 @@ jobs:
     uses: ./.github/workflows/shared-test-api.yaml
     with:
       ENVIRONMENT: {{ cookiecutter.sandbox_stage_name }}
-      STACK_NAME: {{ cookiecutter.stack_name }}
+      STACK_NAME: {{ cookiecutter.stack_name }}-{{ '${{ github.ref_name }}' }}
     secrets: inherit
